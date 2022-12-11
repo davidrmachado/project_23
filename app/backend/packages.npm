@@ -1,0 +1,4 @@
+bcryptjs
+@types/bcryptjs
+jsonwebtoken
+express-async-errors

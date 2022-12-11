@@ -6,6 +6,6 @@ const router = express.Router();
 
 const userController = new UserController();
 
-router.get('/validate', userController.getUser.bind(userController));
+router.get('/', userController.getUser.bind(userController));
 
 export default router;
