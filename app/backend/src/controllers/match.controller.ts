@@ -18,4 +18,21 @@ export default class MatchController {
       res.status(400).json({ errorMessage: { type: 400 } });
     }
   }
+
+  async postMatch(req: Request, res: Response) {
+    const matchInfo = req.body;
+
+    const { type, message } = await this.matchService.postMatch(matchInfo);
+    if (type !== 201) {
+      return res.status(type as number).json({ message });
+    }
+    return res.status(type as number).json(message);
+  }
+
+  async updateMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    await this.matchService.updateCurrentMatch(id);
+
+    return res.status(200).json({ message: 'Finished' });
+  }
 }
