@@ -6,8 +6,8 @@ const router = express.Router();
 
 const userController = new UserController();
 
-router.post('/', userController.authUser.bind(userController));
-
 router.get('/validate', userController.getUser.bind(userController));
+
+router.post('/', userController.authUser.bind(userController));
 
 export default router;

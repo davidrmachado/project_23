@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import { sign, verify, JwtPayload } from 'jsonwebtoken';
 
-import ILogin from '../interfaces/ILogin';
+import IUser from '../interfaces/IUser';
 
 const tokenError = 'Token must be a valid number';
 
 class TokenJWT {
-  generateToken = (data: ILogin) => {
+  generateToken = (data: IUser) => {
     const token = sign(
       data,
       process.env.JWT_SECRET as string,

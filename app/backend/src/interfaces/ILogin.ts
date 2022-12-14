@@ -1,9 +1,4 @@
-interface ILogin {
-  id: string,
-  role: string,
-  email: string,
-  username: string,
-  password: string
+export default interface ILogin {
+  message?: unknown,
+  type?: number,
 }
-
-export default ILogin;

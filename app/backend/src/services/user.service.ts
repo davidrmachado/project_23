@@ -1,36 +1,31 @@
 import * as bcryptjs from 'bcryptjs';
-import ILogin from '../interfaces/ILogin';
-import UserModel from '../database/models/UserModel';
 
+import ILogin from '../interfaces/ILogin';
+import Users from '../database/models/UserModel';
 import JWT from '../utils/JWT';
 
-class UserService {
+export default class UserService {
   jwt = new JWT();
 
   constructor(
-    private user = UserModel,
+    private users = Users,
   ) {}
 
-  public async findUser(token: string) {
-    const userToken = this.jwt.authentication(token);
-    const result = await this.user.findOne({ where: { email: userToken.email } });
+  public async findUser(token: string): Promise<Users | null> {
+    const jwtToken = this.jwt.authentication(token);
+    const result = await this.users.findOne({ where: { email: jwtToken.email } });
 
     return result;
   }
 
-  public async authUser(userData: ILogin) {
-    const { email, password } = userData;
-    const result = await this.user.findOne({ where: { email } });
-
+  public async authLogin(email: string, password: string): Promise<ILogin> {
     if (!email || !password) {
-      return { code: 400 };
+      return { type: 400 };
     }
-
+    const result = await this.users.findOne({ where: { email } });
     if (result && bcryptjs.compareSync(password, result.password)) {
-      return { code: 401 };
+      return { type: 200, message: result };
     }
-    return { code: 200 };
+    return { type: 401 };
   }
 }
-
-export default UserService;

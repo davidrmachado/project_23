@@ -1,35 +1,32 @@
 import { Request, Response } from 'express';
-import JWT from '../utils/JWT';
 import UserService from '../services';
+import JWT from '../utils/JWT';
 
 const fieldMessage = 'All fields must be filled';
 const entryMessage = 'Incorrect email or password';
 
-class UserController {
-  jwt = new JWT();
+export default class LoginController {
   userService = new UserService();
+  jwt = new JWT();
 
-  getUser = async (req: Request, res: Response) => {
+  async getUser(req: Request, res: Response) {
     const { authorization } = req.headers;
-    const userAccount = await this.userService.findUser(authorization as string);
-    if (userAccount) {
-      return res.status(200).json({ role: userAccount.role });
+    const result = await this.userService.findUser(authorization as string);
+    if (result) {
+      return res.status(200).json({ role: result.role });
     }
-  };
+  }
 
-  authUser = async (req: Request, res: Response) => {
-    const { email } = req.body;
-    const { code } = await this.userService.authUser(email);
-    const userToken = this.jwt.generateToken(req.body);
+  async authUser(req: Request, res: Response) {
+    const { email, password } = req.body;
+    const { type } = await this.userService.authLogin(email, password);
 
-    const codeMessage = code === 400 ? fieldMessage : entryMessage;
-
-    if (code !== 200) {
-      return res.status(code as number).json({ codeMessage });
+    if (type !== 200) {
+      const message = type === 400 ? fieldMessage : entryMessage;
+      return res.status(type as number).json({ message });
     }
 
-    return res.status(code).json({ userToken });
-  };
+    const token = this.jwt.generateToken(req.body);
+    return res.status(type).json({ token });
+  }
 }
-
-export default UserController;
