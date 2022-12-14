@@ -7,4 +7,6 @@ const teamController = new TeamController();
 
 router.get('/', teamController.listAll.bind(teamController));
 
+router.get('/:id', teamController.findById.bind(teamController));
+
 export default router;
