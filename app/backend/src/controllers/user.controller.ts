@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import UserService from '../services';
+import { UserService } from '../services';
 import JWT from '../utils/JWT';
 
 const fieldMessage = 'All fields must be filled';
