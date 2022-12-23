@@ -2,6 +2,8 @@ import * as express from 'express';
 
 import routes from './routes';
 
+import httpError from './utils/HTTPError';
+
 class App {
   public app: express.Express;
 
@@ -26,6 +28,8 @@ class App {
     this.app.use(accessControl);
 
     this.app.use(routes);
+
+    this.app.use(httpError);
   }
 
   public start(PORT: string | number):void {

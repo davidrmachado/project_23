@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import JWT from './JWT';
 
+const tokenMessage = 'Token must be a valid token';
+
 const loginValidation = (req: Request, res:Response, next: NextFunction) => {
   const jwt = new JWT();
 
@@ -13,13 +15,13 @@ const loginValidation = (req: Request, res:Response, next: NextFunction) => {
   try {
     const decoded = jwt.authentication(token as string);
 
-    if (decoded.type) return res.status(401).json({ message: 'Token must be a valid token' });
+    if (decoded.type) return res.status(401).json({ message: tokenMessage });
 
     req.body.user = decoded;
 
     next();
   } catch (err) {
-    res.status(401).json({ message: 'Token must be a valid token' });
+    res.status(401).json({ message: tokenMessage });
   }
 };
 
